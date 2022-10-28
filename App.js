@@ -1,14 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, View, StatusBar, Platform } from "react-native";
-import Layout1 from "./Layout1";
-import Layout2 from "./Layout2";
+//zadanie 1
+// import Layout1 from "./components/z1/Layout1";
+// import Layout2 from "./components/z1/Layout2";
+//zadanie 2
+import Calc from "./components/z2/Calc";
 
 export default function App() {
   return (
     <View>
       <StatusBar />
-      <Layout1 />
-      <Layout2 />
+      <Calc />
     </View>
   );
 }
