@@ -1,6 +1,6 @@
 // Skończyłem na check1 oraz jego checkboxie. Ogarnij błąd z checkami
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,9 +10,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import DatePicker from "react-native-modern-datepicker";
-import { CheckBox } from "@rneui/themed";
+import { CheckBox, ButtonGroup } from "@rneui/themed";
 // Checkbox jest zaimportowany z https://reactnativeelements.com/
 
+// TODO: OBEJRZ CO PONIŻEJ
+// ! 159 linijka, zrobić coś z obiektem, tylko nie wiem co. Chyba nie można tego zrobić przez objekt.
 // TODO: Rozwiązać problem dodawania hobby
 // ? Rozwiązać przez checkbox?
 // ? A może zrobić zwyczajne TODO?
@@ -21,6 +23,15 @@ import { CheckBox } from "@rneui/themed";
 
 export default function Form() {
   // ! Pojedyncze dane
+  /* TODO: 
+    1. imię
+    2. nazwisko
+    3. wiek
+    4. adres
+    5. data
+    6. płeć
+    ! 7. zainteresowania
+  */
   const [name, setName] = useState("");
   const [subname, setSubname] = useState("");
   const [age, setAge] = useState(null);
@@ -30,10 +41,17 @@ export default function Form() {
     apartment: null,
   });
   const [selectedDate, setSelectedDate] = useState("");
-  // const [check1, setCheck1] = useState({
-  //   checked: false,
-  //   status: "",
-  // });
+  // Płeć
+  const [gender, setGender] = useState(0);
+  const [statusGender, setStatusGender] = useState(0);
+
+  const [check1, setCheck1] = useState(false);
+  const [football, setFootball] = useState("");
+  const [check2, setCheck2] = useState(false);
+  const [volleyball, setVolleyball] = useState("");
+  const [check3, setCheck3] = useState(false);
+  const [basketball, setBasketball] = useState("");
+
   // ! Obiekt ze wszystkimi danymi. Powyżej pojedyncze dane
   const [userData, setUserData] = useState({
     name: name,
@@ -47,8 +65,27 @@ export default function Form() {
     date: selectedDate,
   });
 
-  // FUNKCJE
-  // Ustawienie wszystkich danych
+  // Po przeładowaniu stanu, wykonują się następujące rzeczy dla sportów:
+  useEffect(() => {
+    if (check1 === true) {
+      setFootball("Piłka nożna");
+    } else {
+      setFootball("");
+    }
+    if (check2 === true) {
+      setVolleyball("Siatkówka");
+    } else {
+      setVolleyball("");
+    }
+    if (check3 === true) {
+      setBasketball("Koszykówka");
+    } else {
+      setBasketball("");
+    }
+  }, [check1, check2, check3]);
+
+  // ! FUNKCJE, logika aplikacji
+  //* Ustawienie wszystkich danych
   const handleViewingData = () => {
     setUserData({
       name,
@@ -61,10 +98,17 @@ export default function Form() {
         apartment: adress.apartment,
       },
       date: selectedDate,
+      gender: statusGender,
     });
   };
-  const handleHobby = () => {};
+  // * Obsługa płci
 
+  // * Obsługa hobby
+  const handleHobby = () => {
+    setCheck1(!check1);
+  };
+
+  // *! Poniżej widoki:
   return (
     <View>
       {/* Intro */}
@@ -137,19 +181,51 @@ export default function Form() {
         }}
         onSelectedChange={(date) => setSelectedDate(date)}
       />
-      {/* <CheckBox
-        center
-        title="Click Here"
-        checked={check1}
-        onPress={handleHobby}
-      /> */}
 
       {/* Button - wysyłanie danych */}
+
+      {/* Wybór płci */}
+      <ButtonGroup
+        buttons={["Kobieta", "Mężczyzna"]}
+        selectedIndex={gender}
+        onPress={(value) => {
+          setGender(value);
+          if (gender < 1) {
+            setStatusGender("Mężczyzna");
+          } else {
+            setStatusGender("Kobieta");
+          }
+        }}
+        containerStyle={{ marginBottom: 20 }}
+      />
+      <CheckBox
+        center
+        title="Piłka nożna"
+        checked={check1}
+        onPress={handleHobby}
+        checkedIcon="dot-circle-o"
+        uncheckedIcon="circle-o"
+      />
+      <CheckBox
+        center
+        title="Siatkówka"
+        checked={check2}
+        onPress={() => setCheck2(!check2)}
+        checkedIcon="dot-circle-o"
+        uncheckedIcon="circle-o"
+      />
+      <CheckBox
+        center
+        title="Koszykówka"
+        checked={check3}
+        onPress={() => setCheck3(!check3)}
+        checkedIcon="dot-circle-o"
+        uncheckedIcon="circle-o"
+      />
       <TouchableOpacity onPress={handleViewingData} style={styles.confirmBtn}>
         <Text style={styles.confirmBtnText}>Wyślij</Text>
       </TouchableOpacity>
-
-      {/* Wyświetlanie danych */}
+      {/* WYŚWIETLANIE DANYCH */}
       <Text>Imię: {userData.name}</Text>
       <Text>Nazwisko: {userData.subname}</Text>
       <Text>Wiek: {userData.age}</Text>
@@ -157,6 +233,11 @@ export default function Form() {
       <Text>Warszawa: {userData.details.street}</Text>
       <Text>Mieszkanie: {userData.details.apartment}</Text>
       <Text>Data urodzenia: {userData.date}</Text>
+      <Text>Płeć: {userData.gender}</Text>
+      <Text>Zainteresowania: {football}</Text>
+      <Text>Zainteresowania: {volleyball}</Text>
+      <Text>Zainteresowania: {basketball}</Text>
+
       {/* <Text>Zainteresowania: {check1}</Text> */}
     </View>
   );

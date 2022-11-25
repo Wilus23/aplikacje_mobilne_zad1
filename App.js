@@ -14,6 +14,7 @@ import {
 // import Calc from "./components/z2/Calc";
 // zadanie3
 import Form from "./components/zad3/Form";
+// import Test from "./components/zad3/Test";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
       <StatusBar />
       <ScrollView>
         <Form />
+        {/* <Test /> */}
       </ScrollView>
     </View>
   );
