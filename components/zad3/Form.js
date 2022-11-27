@@ -46,11 +46,13 @@ export default function Form() {
   const [statusGender, setStatusGender] = useState(0);
 
   const [check1, setCheck1] = useState(false);
-  const [football, setFootball] = useState("");
   const [check2, setCheck2] = useState(false);
-  const [volleyball, setVolleyball] = useState("");
   const [check3, setCheck3] = useState(false);
-  const [basketball, setBasketball] = useState("");
+  const [sports, setSports] = useState({
+    football: "",
+    volleyball: "",
+    basketball: "",
+  });
 
   // ! Obiekt ze wszystkimi danymi. Powyżej pojedyncze dane
   const [userData, setUserData] = useState({
@@ -63,24 +65,47 @@ export default function Form() {
       apartment: adress.apartment,
     },
     date: selectedDate,
+    sports: {
+      football: "",
+      volleyball: "",
+      basketball: "",
+    },
   });
 
   // Po przeładowaniu stanu, wykonują się następujące rzeczy dla sportów:
   useEffect(() => {
     if (check1 === true) {
-      setFootball("Piłka nożna");
+      setSports({
+        ...sports,
+        football: "Piłka nożna",
+      });
     } else {
-      setFootball("");
+      setSports({
+        ...sports,
+        football: "",
+      });
     }
     if (check2 === true) {
-      setVolleyball("Siatkówka");
+      setSports({
+        ...sports,
+        volleyball: "Siatkówka",
+      });
     } else {
-      setVolleyball("");
+      setSports({
+        ...sports,
+        volleyball: "",
+      });
     }
     if (check3 === true) {
-      setBasketball("Koszykówka");
+      setSports({
+        ...sports,
+        basketball: "Siatkówka",
+      });
     } else {
-      setBasketball("");
+      setSports({
+        ...sports,
+        basketball: "",
+      });
     }
   }, [check1, check2, check3]);
 
@@ -99,6 +124,12 @@ export default function Form() {
       },
       date: selectedDate,
       gender: statusGender,
+      sports: {
+        ...sports,
+        football: sports.football,
+        volleyball: sports.volleyball,
+        basketball: sports.volleyball,
+      },
     });
   };
   // * Obsługa płci
@@ -202,7 +233,7 @@ export default function Form() {
         center
         title="Piłka nożna"
         checked={check1}
-        onPress={handleHobby}
+        onPress={() => setCheck1(!check1)}
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
       />
@@ -234,9 +265,9 @@ export default function Form() {
       <Text>Mieszkanie: {userData.details.apartment}</Text>
       <Text>Data urodzenia: {userData.date}</Text>
       <Text>Płeć: {userData.gender}</Text>
-      <Text>Zainteresowania: {football}</Text>
-      <Text>Zainteresowania: {volleyball}</Text>
-      <Text>Zainteresowania: {basketball}</Text>
+      <Text>Zainteresowania: {sports.football}</Text>
+      <Text>Zainteresowania: {sports.volleyball}</Text>
+      <Text>Zainteresowania: {sports.basketball}</Text>
 
       {/* <Text>Zainteresowania: {check1}</Text> */}
     </View>
